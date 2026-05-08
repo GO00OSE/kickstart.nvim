@@ -153,9 +153,10 @@ vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Tab length
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.softtabstop = 2
+-- currently made for mips lol
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
 -- Preview substitutions live, as you type!
@@ -465,6 +466,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- disable and enable diagnostics
+      vim.keymap.set('n', '<leader>td', function()
+        vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+      end, { desc = '[T]oggle [D]iagnostics' })
     end,
   },
 
@@ -757,12 +763,12 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, html = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -779,6 +785,7 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        c = { 'clang-format' },
       },
     },
   },
@@ -1021,11 +1028,13 @@ require('lazy').setup({
   },
 })
 
-vim.o.background = 'dark'
-vim.cmd [[colorscheme gruvbox]]
+-- vim.o.background = 'dark'
+-- vim.cmd [[colorscheme gruvbox]]
+vim.cmd.colorscheme 'gruvbox-material'
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_ddnetrwPlugin = 1
+vim.cmd.set 'cc=80'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
